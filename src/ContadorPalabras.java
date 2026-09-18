@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContadorPalabras {
     public static void main(String[] args) {
@@ -24,6 +26,9 @@ public class ContadorPalabras {
 
         System.out.println("El archivo existe y está listo para ser procesado.");
 
+        // Parte VI - Paso 11: Inicializar el Map para guardar las frecuencias
+        Map<String, Integer> frecuencias = new HashMap<>();
+
         // Parte IV y V: Lectura, normalización y separación de palabras
         try (BufferedReader lector = Files.newBufferedReader(archivo)) {
             String linea;
@@ -40,12 +45,23 @@ public class ContadorPalabras {
 
                 for (String palabra : palabras) {
                     if (!palabra.isEmpty()) {
-                        System.out.println(palabra);
+                        // Parte VI - Paso 12: Actualizar frecuencias con getOrDefault
+                        frecuencias.put(
+                                palabra,
+                                frecuencias.getOrDefault(palabra, 0) + 1
+                        );
                     }
                 }
             }
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
+            return;
+        }
+
+        // Mostrar las frecuencias contabilizadas
+        System.out.println("\n--- RESULTADO DE FRECUENCIAS ---");
+        for (Map.Entry<String, Integer> entrada : frecuencias.entrySet()) {
+            System.out.println(entrada.getKey() + " -> " + entrada.getValue());
         }
     }
 }
