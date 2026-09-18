@@ -7,18 +7,15 @@ import java.util.Map;
 
 public class ContadorPalabras {
     public static void main(String[] args) {
-        // Validar que se reciba exactamente un argumento
         if (args.length != 1) {
             System.out.println("Uso: java ContadorPalabras <archivo>");
             return;
         }
 
-        // Paso 6: Trabajar con Path
         Path archivo = Path.of(args[0]);
         System.out.println("Archivo: " + archivo.getFileName());
         System.out.println("Ruta: " + archivo.toAbsolutePath());
 
-        // Paso 7: Verificar el archivo con Files.exists()
         if (!Files.exists(archivo)) {
             System.err.println("El archivo no existe: " + archivo);
             return;
@@ -26,40 +23,31 @@ public class ContadorPalabras {
 
         System.out.println("El archivo existe y está listo para ser procesado.");
 
-        // Parte VI - Paso 11: Inicializar el Map para guardar las frecuencias
         Map<String, Integer> frecuencias = new HashMap<>();
 
-        // Parte IV y V: Lectura, normalización y separación de palabras
         try (BufferedReader lector = Files.newBufferedReader(archivo)) {
             String linea;
             while ((linea = lector.readLine()) != null) {
-                // Paso 10: Normalización (minúsculas y eliminación de signos)
                 linea = linea.toLowerCase();
-                linea = linea.replaceAll(
-                        "[^\\p{L}\\p{N}\\s]",
-                        ""
-                );
+                linea = linea.replaceAll("[^\\p{L}\\p{N}\\s]", "");
 
-                // Paso 9: Separar palabras por espacios en blanco
+                if (linea.isBlank()) {
+                    continue;
+                }
+
                 String[] palabras = linea.trim().split("\\s+");
-
                 for (String palabra : palabras) {
-                    if (!palabra.isEmpty()) {
-                        // Parte VI - Paso 12: Actualizar frecuencias con getOrDefault
-                        frecuencias.put(
-                                palabra,
-                                frecuencias.getOrDefault(palabra, 0) + 1
-                        );
-                    }
+                    frecuencias.put(
+                            palabra,
+                            frecuencias.getOrDefault(palabra, 0) + 1
+                    );
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
-            return;
+            System.err.println("Error de lectura: " + e.getMessage());
         }
 
-        // Mostrar las frecuencias contabilizadas
-        System.out.println("\n--- RESULTADO DE FRECUENCIAS ---");
+        System.out.println("\n-RESULTADOS OBTENIDOS-");
         for (Map.Entry<String, Integer> entrada : frecuencias.entrySet()) {
             System.out.println(entrada.getKey() + " -> " + entrada.getValue());
         }
