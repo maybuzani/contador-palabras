@@ -83,11 +83,11 @@ Los flujos de salida permiten escribir datos.
 
 ## 4. Identificar entrada, procesamiento y salida
 
-| Elemento | Descripción |
-|---|---|
-| Entrada | |
-| Procesamiento | |
-| Salida | |
+| Elemento | Descripción                               |
+|---|-------------------------------------------|
+| Entrada | Archivo de texo                           |
+| Procesamiento | La informacion del contenido              |
+| Salida | la frecuencia de las palabras del archivo |
 
 ```text
                    INPUT STREAM
@@ -112,7 +112,7 @@ Los flujos de salida permiten escribir datos.
 ```
 
 **Pregunta:** ¿Qué tipo de flujo resulta más apropiado para este problema: bytes o caracteres? Justifique.
-
+El flujo de caracteres, porque el problema procesa el archivo texto y las clasesbasadas en caracteres permiten leer y procesar la información por líneas
 # Parte III. Recibir y representar el archivo
 
 ## 5. Proporcionar el nombre mediante argumento
@@ -143,7 +143,7 @@ java ContadorPalabras datos/texto.txt
 ```
 
 **Pregunta:** ¿Por qué resulta preferible recibir el nombre del archivo como argumento en lugar de escribirlo directamente en el código?
-
+Resulta preferible porque reutilización al programa
 ## 6. Trabajar con `Path`
 
 ```java
