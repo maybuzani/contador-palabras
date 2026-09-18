@@ -238,7 +238,7 @@ java
 ```
 
 **Pregunta:** ¿Qué ocurriría si no normalizamos las palabras antes de contabilizarlas?
-
+El sistema de conteo cometería errores de precisión
 # Parte VI. Contabilizar palabras
 
 ## 11. Utilizar un `Map`
