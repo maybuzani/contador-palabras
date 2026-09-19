@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ContadorPalabras {
             System.err.println("El archivo no existe: " + archivo);
             return;
         }
+
         System.out.println("El archivo existe y está listo para ser procesado.");
         Map<String, Integer> frecuencias = new HashMap<>();
 
@@ -47,13 +49,26 @@ public class ContadorPalabras {
         }
         Map<String, Integer> ordenadas = new TreeMap<>(frecuencias);
 
-        System.out.println("\n-FRECUENCIA DE PALABRAS-");
-        for (Map.Entry<String, Integer> entrada : ordenadas.entrySet()) {
-            System.out.printf(
-                    "%-20s %d%n",
-                    entrada.getKey(),
-                    entrada.getValue()
-            );
+        try {
+            Path directorioSalida = Path.of("salida");
+            Files.createDirectories(directorioSalida);
+            Path archivoSalida = directorioSalida.resolve("frecuencias.txt");
+
+            try (PrintWriter escritor = new PrintWriter(Files.newBufferedWriter(archivoSalida))) {
+                escritor.printf("%-20s %s%n", "PALABRA", "FRECUENCIA");
+                escritor.println("-------------------------------");
+                for (Map.Entry<String, Integer> entrada : ordenadas.entrySet()) {
+                    escritor.printf(
+                            "%-20s %d%n",
+                            entrada.getKey(),
+                            entrada.getValue()
+                    );
+                }
+            }
+            System.out.println("Resultados guardados exitosamente en: " + archivoSalida.toAbsolutePath());
+
+        } catch (IOException e) {
+            System.err.println("Error al escribir resultados: " + e.getMessage());
         }
     }
 }
