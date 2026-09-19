@@ -25,6 +25,7 @@ public class ContadorPalabras {
 
         System.out.println("El archivo existe y está listo para ser procesado.");
         Map<String, Integer> frecuencias = new HashMap<>();
+        int totalPalabras = 0;
 
         try (BufferedReader lector = Files.newBufferedReader(archivo)) {
             String linea;
@@ -38,21 +39,31 @@ public class ContadorPalabras {
 
                 String[] palabras = linea.trim().split("\\s+");
                 for (String palabra : palabras) {
-                    frecuencias.put(
-                            palabra,
-                            frecuencias.getOrDefault(palabra, 0) + 1
-                    );
+                    if (!palabra.isEmpty()) {
+                        frecuencias.put(
+                                palabra,
+                                frecuencias.getOrDefault(palabra, 0) + 1
+                        );
+                        totalPalabras++;
+                    }
                 }
             }
         } catch (IOException e) {
             System.err.println("Error de lectura: " + e.getMessage());
         }
+
         Map<String, Integer> ordenadas = new TreeMap<>(frecuencias);
+        String palabraMasFrecuente = "";
+        int frecuenciaMaxima = 0;
+        for (Map.Entry<String, Integer> entrada : frecuencias.entrySet()) {
+            if (entrada.getValue() > frecuenciaMaxima) {
+                palabraMasFrecuente = entrada.getKey();
+                frecuenciaMaxima = entrada.getValue();
+            }
+        }
 
         try {
-            Path directorioSalida = Path.of("salida");
-            Files.createDirectories(directorioSalida);
-            Path archivoSalida = directorioSalida.resolve("frecuencias.txt");
+            Path archivoSalida = Path.of("frecuencias.txt");
 
             try (PrintWriter escritor = new PrintWriter(Files.newBufferedWriter(archivoSalida))) {
                 escritor.printf("%-20s %s%n", "PALABRA", "FRECUENCIA");
@@ -70,5 +81,13 @@ public class ContadorPalabras {
         } catch (IOException e) {
             System.err.println("Error al escribir resultados: " + e.getMessage());
         }
+        System.out.println("\n--- ESTADÍSTICAS GENERALES ---");
+        System.out.println("Total de palabras: " + totalPalabras);
+        System.out.println("Palabras diferentes: " + frecuencias.size());
+        System.out.println(
+                "Palabra más frecuente: "
+                        + palabraMasFrecuente
+                        + " (" + frecuenciaMaxima + ")"
+        );
     }
 }
